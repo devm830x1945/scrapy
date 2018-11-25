@@ -4,14 +4,11 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup as BSoup
 
 import re
-
+import logging
+logging.basicConfig(filename='errors.log',level=logging.DEBUG)
 opts = Options()
 opts.add_argument('headless')
-
-
 browser = Chrome()
-
-
 
 def get_listing():
     LIST_CATEGORIES = []
@@ -37,6 +34,7 @@ def cleaning_text(string):
     return re.sub(r'<[a-zA-Z]*>|</[a-zA-Z]*>', string, ' ')
 
 def parse(url):
+    
 
     d = dict()
 
@@ -61,29 +59,46 @@ def parse(url):
         break
 
     #for i in browser.find_elements_by_xpath("//div[@class='mb4']"):
-    for i in bs_obj.find_all("div", {"class": "mb4"}):
+    for i in bs_obj.find_all("div", {"class": "gb-rich-txt"}):
         try:
+            #children = i.findChildren("p", recursive=False)
             #for j in i.find_elements_by_class_name("//div[@class='graphite']"):
+            print(dir(i))
+            print(i.find_previous_sibling('h3', {'class':'graphite'}))
+            if not i.find_previous_sibling('h3',{'class':'graphite'}):
+                print('Descripcion de empresa')
+                d['description_emprsa'] = i.text
+
             for j in bs_obj.find_all("h3", {"class": "graphite"}):
                 cadena_feature = j.text
                 print(cadena_feature)
                 print('******************')
                 #j.get_attribute('innerHTML')
                 if 'beneficios' in str(cadena_feature).lower() or 'benefits' in str(cadena_feature).lower():
-                    p = j.find('p')
-                    print('*********** >>> ', p)
-                    d['beneficios'] = p.text
+                    print('BENEFICIOS')
+                    x = j.find_next_sibling('div', {'class':'gb-rich-txt'})
+                    print('*********** >>> ', x.get_text())
+                    if x:
+                        d['beneficios'] = x.get_text()
+                    else:
+                        d['beneficios'] = ''
                     #j.get_attribute('innerHTML')
-                else:
-                    p = j.find('p')
-                    print('*********** >>> ', p)
-                    d['requisitos'] = p.text
+                elif 'requerimientos' in str(cadena_feature).lower() or 'requirements' in str(cadena_feature).lower() or 'requisitos' in str(cadena_feature).lower():
+                    print('REQUERIMIENTOS')
+                    x = j.find_next_sibling('div', {'class':'gb-rich-txt'})
+                    print('*********** >>> ', x.get_text())
+                    if x:
+                        d['requisitos'] = x.get_text()
+                    else:
+                        d['requisitos'] = ''
                     #j.get_attribute('innerHTML')
-                break
-        except:
+                
+        except Exception as e:
             # Descripcion de la empresa
-            d['description_emprsa'] = i.text
+            #d['description_emprsa'] = i.text
             #i.get_attribute('innerHTML')
+            logging.info(e)
+            print(e)
             break
             #Verificar que sea beneficios o requisitos
 

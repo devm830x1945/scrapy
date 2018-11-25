@@ -1,9 +1,8 @@
-from server import app
-from engien import get_all_links, parse
+
 import argparse
 
 
-from engien.config import client
+
 
 
 
@@ -17,14 +16,18 @@ def main():
     collected_inputs = {'u': args.u}
 
     if collected_inputs['u'] == 'y':
+        from engien.config import client
+        from engien.scrapy import get_all_links, parse
+        print('No entres!')
         db = client['empleos']
         collection = db.empleos
         try:
             collection.insert_many([i for i in map(parse, get_all_links())])
             print('Success')
-        except :
+        except Exception as e:
             print('Algo paso')
     else:
+        from server.server import app
         app.run(debug=True)
         print('No actualiza')
 
