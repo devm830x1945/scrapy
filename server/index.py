@@ -27,3 +27,6 @@ def get_by_categoria(categoria):
     output.append({'title' : s['title'], 'description' : s['description_emprsa']})
   return jsonify({'result' : output})
 
+
+
+app_prod = app

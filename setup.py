@@ -9,5 +9,8 @@ setup(
     author='Jaime',
     author_email='jaimeardp@gmail.com',
     description='',
-    scripts=['bin/index']
+    entry_points = {
+    'console_scripts': ['server.cli=server.cli:main'],
+    }
+
 )

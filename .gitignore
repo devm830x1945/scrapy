@@ -3,3 +3,7 @@
 /.idea/*.pyc
 /.idea/*.xml
 /.idea/*.iml
+
+/build/
+
+/testsscrappeo.egg-info/
