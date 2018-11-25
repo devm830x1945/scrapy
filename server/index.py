@@ -2,6 +2,7 @@
 from flask import Flask
 from flask import jsonify
 from engien.config import client
+#import engien
 
 
 app = Flask(__name__)
@@ -13,9 +14,9 @@ collection = db.empleos
 @app.route('/empleos', methods=['GET'])
 def get_all_stars():
   output = []
-  for s in collection.find({}):
+  for s in collection.find():
     print(s)
-    output.append({'title' : s['title'], 'description' : s['description_emprsa'], 'country': s['country']})
+    output.append({'title' : s['title'], 'description' : s['description_emprsa']})
   return jsonify({'result' : output})
 
 @app.route('/empleos/<categoria>', methods=['GET'])

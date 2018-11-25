@@ -8,6 +8,8 @@ opts.add_argument('headless')
 
 browser = Chrome()
 
+
+
 def get_listing():
     LIST_CATEGORIES = []
     browser.get('https://www.getonbrd.com.pe/empleos/')
