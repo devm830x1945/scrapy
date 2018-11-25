@@ -6,7 +6,7 @@ opts = Options()
 opts.add_argument('headless')
 
 
-browser = Chrome(opts=opts)
+browser = Chrome()
 
 def get_listing():
     LIST_CATEGORIES = []
