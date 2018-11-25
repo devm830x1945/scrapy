@@ -1,10 +1,14 @@
-
-from server.index import app
+from server import app
 from engien import get_all_links, parse
-from engien import client
 import argparse
 
+
+from engien.config import client
+
+
+
 def main():
+    print('******************')
     parser = argparse.ArgumentParser(prog='paramas')
     parser.add_argument('-u', nargs='?', help='update empleos -u  <y> Si  ')
 
@@ -16,13 +20,20 @@ def main():
         db = client['empleos']
         collection = db.empleos
         try:
-            result = collection.insert_many([i for i in map(parse, get_all_links())])
-
+            collection.insert_many([i for i in map(parse, get_all_links())])
             print('Success')
         except :
             print('Algo paso')
     else:
+        app.run(debug=True)
         print('No actualiza')
 
-    app.run(debug=True)
+
+    # import engien
+
+
+
+
+
+
 
